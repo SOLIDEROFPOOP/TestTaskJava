@@ -11,4 +11,5 @@ public interface AccountService {
     public Optional<Account> getAccountById(Long accountId);
 
     public void transferMoney(Account senderAcc, Account receiverAcc, double amount);
+
 }

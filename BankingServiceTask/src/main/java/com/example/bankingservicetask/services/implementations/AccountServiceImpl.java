@@ -30,13 +30,17 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void transferMoney(Account senderAcc, Account receiverAcc, double amount) {
-        if (senderAcc.getBalance() >= amount){
-            senderAcc.setBalance(senderAcc.getBalance() - amount);
-            receiverAcc.setBalance(receiverAcc.getBalance() + amount);
-            accountRepository.save(senderAcc);
-            accountRepository.save(receiverAcc);
-        } else {
-            throw new RuntimeException("Not enough balance in account");
+        try {
+            if (senderAcc.getBalance() >= amount){
+                senderAcc.setBalance(senderAcc.getBalance() - amount);
+                receiverAcc.setBalance(receiverAcc.getBalance() + amount);
+                accountRepository.save(senderAcc);
+                accountRepository.save(receiverAcc);
+            } else {
+                throw new RuntimeException("Not enough balance in account");
+            }
+        }catch (Exception e){
+            System.out.println(e);
         }
     }
 }

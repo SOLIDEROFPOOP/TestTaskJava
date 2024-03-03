@@ -1,7 +1,9 @@
 package com.example.bankingservicetask.services.implementations;
 
+import com.example.bankingservicetask.dto.RegisterDTO;
 import com.example.bankingservicetask.models.Account;
 import com.example.bankingservicetask.models.User;
+import com.example.bankingservicetask.repositories.AccountRepository;
 import com.example.bankingservicetask.repositories.UserRepository;
 import com.example.bankingservicetask.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +16,12 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
+    private AccountRepository accountRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, AccountRepository accountRepository) {
         this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
     }
     @Override
     public List<User> getAllUsers() {
@@ -32,6 +36,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(User user) {
         return userRepository.save(user);
+    }
+    public User createUser(RegisterDTO registerDTO) {
+        User user = new User();
+        user.setFirstName(registerDTO.getFirstName());
+        user.setLastName(registerDTO.getLastName());
+        user.setEmail(user.getEmail());
+        Account account = new Account();
+        account.setBalance(registerDTO.getBalanceAmount());
+        user.setAccount(account);
+        user.setPhoneNumber(registerDTO.getPhoneNumber());
+        accountRepository.save(account);
+        userRepository.save(user);
+        return user;
     }
 
     @Override
